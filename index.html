@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>名單文字清理工具 v4</title>
+    <title>名單文字清理工具</title>
     <style>
         body { font-family: "Microsoft JhengHei", sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background-color: #f0f2f5; line-height: 1.6; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
@@ -15,7 +14,6 @@
         .btn-primary { background-color: #d93025; color: white; }
         .btn-copy { background-color: #5f6368; color: white; }
         .result-label { font-weight: bold; margin-top: 25px; display: block; color: #555; }
-        /* 設定 white-space: pre-line 讓換行能正確顯示 */
         #outputArea { margin-top: 10px; background: #fff; padding: 15px; border: 1px solid #dadce0; border-radius: 8px; min-height: 100px; white-space: pre-line; color: #202124; font-size: 16px; }
     </style>
 </head>
@@ -42,23 +40,14 @@
         if (!input.trim()) return alert("請先輸入內容！");
 
         let cleaned = input
-            // 1. 移除百分比 (+15%, +30%)
             .replace(/\+\d+%/g, '')         
-            // 2. 移除括號內的數字 ((1), (15))
             .replace(/\(\d+\)/g, '')        
-            // 3. 移除特定符號 (·, ✅, ⭐ 等非字元符號)
             .replace(/·/g, '')
             .replace(/[\u1000-\uFFFF]|[^\x00-\x7F]/gu, ' ')
-            // 4. 把多個空格統一換成單個空格
             .replace(/\s+/g, ' ')
             .trim();
 
-        // 5. 將結果根據空格分割開來，然後用「換行符號」結合回去
-        // 如果名字中間本來就有空格 (如 Nico Robin)，我們會嘗試保留它
-        // 這裡邏輯優化：偵測到多個角色後自動換行
         let list = cleaned.split(' ');
-        
-        // 移除清單中可能產生的空字串
         let finalArray = list.filter(item => item.trim() !== "");
         
         document.getElementById('outputArea').innerText = finalArray.join('\n');
